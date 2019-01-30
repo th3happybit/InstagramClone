@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Feed">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/actiobar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:background="?attr/colorPrimary" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ImageView
+        android:id="@+id/insta_icon"
+        android:layout_width="21dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/instaicon"
+        app:layout_constraintStart_toStartOf="@id/actiobar_layout"
+        app:layout_constraintTop_toTopOf="@id/actiobar_layout"
+        app:layout_constraintBottom_toBottomOf="@id/actiobar_layout"
+        android:elevation="5dp"/>
+
+    <ImageView
+        android:id="@+id/insta_title"
+        android:layout_width="79dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
+        android:src="@drawable/instatitle"
+        app:layout_constraintStart_toEndOf="@id/insta_icon"
+        app:layout_constraintTop_toTopOf="@id/actiobar_layout"
+        app:layout_constraintBottom_toBottomOf="@id/actiobar_layout"
+        android:elevation="5dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

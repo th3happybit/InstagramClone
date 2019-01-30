@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">InstagramClone</string>
+    <string name="app_name">Instagram</string>
+    <string name="title_activity_feed">Feed</string>
 </resources>

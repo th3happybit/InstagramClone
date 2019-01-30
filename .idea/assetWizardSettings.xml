@@ -16,14 +16,27 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
+                        <option name="children">
+                          <map>
+                            <entry key="clipartAsset">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="url" value="jar:file:/opt/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_favorite_border_black_24dp.xml" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="52" />
-                            <entry key="outputName" value="ic_facebook_login" />
+                            <entry key="color" value="4a4a4a" />
+                            <entry key="outputName" value="ic_favorite_border_black_24dp" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="$PROJECT_DIR$/../../Downloads/facebook_login.svg" />
-                            <entry key="width" value="320" />
                           </map>
                         </option>
                       </PersistentState>

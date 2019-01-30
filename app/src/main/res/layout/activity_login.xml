@@ -98,6 +98,7 @@
         app:layout_constraintBottom_toTopOf="@+id/or_layout">
 
         <ImageButton
+            android:id="@+id/login_btn_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/login_background" />
