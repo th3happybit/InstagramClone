@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="10dp"
-    android:layout_marginBottom="16dp"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
-    app:cardElevation="9dp">
+    android:layout_marginBottom="16dp"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/card_layout"
@@ -16,91 +17,89 @@
 
         <ImageView
             android:id="@+id/post_image"
-            app:layout_constraintTop_toTopOf="@id/card_layout"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="246dp"
+            android:src="@drawable/ilyes"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/facebook_login"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
             android:layout_width="26dp"
             android:layout_height="26dp"
-            android:layout_marginTop="10dp"
+            app:civ_border_color="#d2d2d2"
+            app:civ_border_width="1dp"
             android:layout_marginStart="16dp"
-            app:layout_constraintTop_toBottomOf="@id/post_image"
+            android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="parent"
-            android:src="@drawable/instaicon"/>
-
+            app:layout_constraintTop_toBottomOf="@id/post_image"
+            android:src="@drawable/oussama"/>
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:textColor="@color/gray"
-            android:layout_marginTop="15dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/gray"
+            android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@id/profile_image"
-            app:layout_constraintTop_toBottomOf="@id/post_image"/>
+            app:layout_constraintTop_toBottomOf="@id/post_image" />
 
         <ImageButton
             android:id="@+id/heart_it"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/heart_simple_line_icons"
-            android:background="#ffffff"
-            app:layout_constraintTop_toBottomOf="@id/post_image"
-            app:layout_constraintEnd_toStartOf="@id/send_it"
+            android:layout_marginTop="13dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="13dp"/>
+            android:background="#ffffff"
+            android:src="@drawable/heart_simple_line_icons"
+            app:layout_constraintEnd_toStartOf="@id/send_it"
+            app:layout_constraintTop_toBottomOf="@id/post_image" />
 
         <ImageButton
             android:id="@+id/send_it"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/post_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/paper_plane_simple_line_icons"
-            android:background="#ffffff"
+            android:layout_marginTop="13dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginTop="13dp"/>
+            android:background="#ffffff"
+            android:src="@drawable/paper_plane_simple_line_icons"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/post_image" />
 
         <TextView
             android:id="@+id/post_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profile_image"
-            android:textSize="12sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="13dp"
             android:textColor="@color/gray"
-            android:layout_marginTop="13dp"
-            android:layout_marginStart="16dp"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/email_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Leave a comment"
-            app:hintEnabled="false"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:layout_constraintTop_toBottomOf="@id/post_text"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_image" />
+
+        <EditText
+            android:id="@+id/comment_input"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/post_text"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginTop="13dp"
-            android:layout_marginBottom="13dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/comment_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:typeface="sans"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="13dp"
+            android:background="@drawable/rounded_corners"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="9dp"
+            android:paddingBottom="9dp"
+            android:hint="Leave a comment"
+            android:textSize="12sp"
+            android:textColor="#b5b5b5"
+            android:inputType="textMultiLine"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

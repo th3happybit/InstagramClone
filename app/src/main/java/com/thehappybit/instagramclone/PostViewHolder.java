@@ -1,6 +1,8 @@
 package com.thehappybit.instagramclone;
 
+import android.text.Editable;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +19,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private ImageView profile_image;
     private TextView userName;
     private TextView postText;
-    private TextInputEditText commentInput;
+    private EditText commentInput;
     private ImageButton heartButton;
     private ImageButton sendButton;
 
@@ -32,6 +34,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         heartButton = itemView.findViewById(R.id.heart_it);
         sendButton = itemView.findViewById(R.id.send_it);
     }
+
     public void bindToPost(Post post){
 
         if (post != null){

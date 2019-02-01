@@ -23,7 +23,6 @@ public class PostListAdapter  extends RecyclerView.Adapter<PostViewHolder> {
         this.posts = posts;
     }
 
-
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
