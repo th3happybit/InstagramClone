@@ -5,10 +5,20 @@ import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.thehappybit.instagramclone.Models.Post;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class Feed extends AppCompatActivity {
+
+
+    private RecyclerView feed_recyclerview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +28,23 @@ public class Feed extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        feed_recyclerview = findViewById(R.id.feed_recyclerview);
+        feed_recyclerview.setHasFixedSize(true);
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+
+        feed_recyclerview.setLayoutManager(linearLayoutManager);
+
+        List<Post> postList = new ArrayList<>();
+        postList.add(new Post("Oussama Messabih", "Android workshop 1", "",""));
+        postList.add(new Post("Oussama Messabih", "Android workshop 2", "",""));
+        postList.add(new Post("Oussama Messabih", "Android workshop 3", "",""));
+        postList.add(new Post("Oussama Messabih", "Android workshop 4", "",""));
+
+        PostListAdapter postListAdapter = new PostListAdapter(this, postList);
+
+        feed_recyclerview.setAdapter(postListAdapter);
     }
 
     @Override
