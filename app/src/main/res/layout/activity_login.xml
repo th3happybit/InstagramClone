@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Login"
-    android:background="@color/colorPrimary">
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/line_start"
@@ -35,7 +36,7 @@
         app:layout_constraintLeft_toRightOf="@+id/line_start"
         app:layout_constraintRight_toLeftOf="@+id/line_end"
         app:layout_constraintTop_toTopOf="@id/line_top"
-        app:layout_constraintBottom_toTopOf="@id/email_input"
+        app:layout_constraintBottom_toTopOf="@id/passwd_input"
         android:src="@drawable/bitmap" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -49,16 +50,18 @@
         android:id="@+id/email_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@+id/line_start"
-        app:layout_constraintRight_toLeftOf="@+id/line_end"
-        app:layout_constraintTop_toBottomOf="@+id/line_logo"
+        app:layout_constraintLeft_toRightOf="@id/line_start"
+        app:layout_constraintRight_toLeftOf="@id/line_end"
+        app:layout_constraintTop_toBottomOf="@id/logo"
         app:layout_constraintBottom_toTopOf="@id/passwd_input"
-        android:hint="Enter your email"
+        android:layout_marginTop="16dp"
+        android:hint="Enter your password "
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textPassword"
             android:singleLine="true"
             android:typeface="sans" />
 
@@ -68,10 +71,10 @@
         android:id="@+id/passwd_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@+id/line_start"
-        app:layout_constraintRight_toLeftOf="@+id/line_end"
-        app:layout_constraintTop_toBottomOf="@+id/email_input"
-        app:layout_constraintBottom_toTopOf="@+id/login_btn"
+        app:layout_constraintLeft_toRightOf="@id/line_start"
+        app:layout_constraintRight_toLeftOf="@id/line_end"
+        app:layout_constraintTop_toBottomOf="@id/email_input"
+        app:layout_constraintBottom_toTopOf="@id/login_btn"
         android:layout_marginTop="16dp"
         android:hint="Enter your password "
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">

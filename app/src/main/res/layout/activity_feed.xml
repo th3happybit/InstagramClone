@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Feed">
+    tools:context=".Feed"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feed_recyclerview"
@@ -16,8 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="?android:actionBarSize"
-        android:layout_marginBottom="?android:actionBarSize"
-        android:background="#ffff" />
+        android:layout_marginBottom="?android:actionBarSize"/>
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/actiobar_layout"

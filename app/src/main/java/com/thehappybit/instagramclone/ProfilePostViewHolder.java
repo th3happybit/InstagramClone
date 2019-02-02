@@ -18,6 +18,6 @@ public class ProfilePostViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindToPost(String url){
-        //Picasso.get().load(url).into(image);
+        Picasso.get().load(url).into(image);
     }
 }

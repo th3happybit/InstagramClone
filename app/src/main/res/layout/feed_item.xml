@@ -17,12 +17,13 @@
 
         <ImageView
             android:id="@+id/post_image"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="246dp"
             android:src="@drawable/ilyes"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="fitXY"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
@@ -35,6 +36,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/post_image"
             android:src="@drawable/oussama"/>
+
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
@@ -99,7 +101,7 @@
             android:hint="Leave a comment"
             android:textSize="12sp"
             android:textColor="#b5b5b5"
-            android:inputType="textMultiLine"/>
+            android:inputType="textLongMessage"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

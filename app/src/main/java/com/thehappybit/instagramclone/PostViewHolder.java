@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.squareup.picasso.Picasso;
 import com.thehappybit.instagramclone.Models.Post;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         if (post != null){
             userName.setText(post.getUserName());
             postText.setText(post.getPostText());
+            Picasso.get().load(post.getPostImage()).into(postImage);
+            Picasso.get().load(post.getProfileImage()).into(profile_image);
         }
     }
 }
