@@ -22,12 +22,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.9"/>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/line_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.05"/>
 
     <ImageView
         android:id="@+id/logo"
@@ -35,16 +29,10 @@
         android:layout_height="89.1dp"
         app:layout_constraintLeft_toRightOf="@+id/line_start"
         app:layout_constraintRight_toLeftOf="@+id/line_end"
-        app:layout_constraintTop_toTopOf="@id/line_top"
-        app:layout_constraintBottom_toTopOf="@id/passwd_input"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/email_input"
+        android:layout_marginTop="20dp"
         android:src="@drawable/bitmap" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/line_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.35" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email_input"
