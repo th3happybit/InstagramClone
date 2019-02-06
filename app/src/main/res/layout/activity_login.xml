@@ -159,7 +159,7 @@
 
     </LinearLayout>
 
-    <ImageButton
+    <com.facebook.login.widget.LoginButton
         android:id="@+id/facebook_login"
         android:layout_width="0dp"
         android:layout_height="52dp"
@@ -169,7 +169,7 @@
         app:layout_constraintLeft_toRightOf="@+id/line_start"
         app:layout_constraintRight_toLeftOf="@+id/line_end"
         app:layout_constraintTop_toBottomOf="@+id/or_layout"
-        app:layout_constraintBottom_toTopOf="@+id/separator"/>
+        app:layout_constraintBottom_toTopOf="@+id/separator" />
 
     <View
         android:id="@+id/separator"

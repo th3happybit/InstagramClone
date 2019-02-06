@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Instagram</string>
     <string name="title_activity_feed">Feed</string>
+
+    <string name="facebook_app_id">412433112834942</string>
+    <string name="fb_login_protocol_scheme">fb412433112834942</string>
+
 </resources>

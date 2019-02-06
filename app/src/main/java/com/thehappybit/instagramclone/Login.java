@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,11 +14,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -36,6 +46,8 @@ public class Login extends AppCompatActivity {
     //when create a new account
     private boolean createNew = false;
 
+    // callback manager to manage the the callbacks
+    private CallbackManager callbackManager;
 
     private ProgressBar progressBar;
     @Override
@@ -95,6 +107,31 @@ public class Login extends AppCompatActivity {
 
         // init progress bar
         progressBar = findViewById(R.id.progress_bar);
+
+
+
+        // Initialize Facebook Login button
+        callbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = findViewById(R.id.facebook_login);
+        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                //To handle the access token and pass it to Firebase credential login
+                handleFacebookLoginToken(loginResult.getAccessToken());
+
+            }
+
+            @Override
+            public void onCancel() {
+                updateUI(null);
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                updateUI(null);
+            }
+        });
     }
 
     @Override
@@ -240,7 +277,11 @@ public class Login extends AppCompatActivity {
 
     // to sign out
     private void signOut(){
+        //firebase sign out
         firebaseAuth.signOut();
+        //facebook log out in case of using facebook login
+        LoginManager.getInstance().logOut();
+
         updateUI(null);
     }
 
@@ -250,5 +291,36 @@ public class Login extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
         else
             progressBar.setVisibility(View.GONE);
+    }
+
+    //to handle the facebook login access token
+    private void handleFacebookLoginToken(AccessToken token){
+        showProgressBar(true);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    updateUI(user);
+                }else{
+                    Log.w("fblogin", "signInWithCredential:failure", task.getException());
+                    Toast.makeText(getApplicationContext(), "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                    updateUI(null);
+                }
+                showProgressBar(false);
+            }
+        });
+    }
+
+    // to handle the back data from facebook login activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Pass the activity result back to the Facebook SDK
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }
