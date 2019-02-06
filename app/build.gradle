@@ -29,6 +29,12 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     // adding firebase
     implementation 'com.google.firebase:firebase-core:16.0.4'
+    // adding database library
+    implementation 'com.google.firebase:firebase-database:16.0.6'
+    // adding storage library
+    implementation 'com.google.firebase:firebase-storage:16.0.5'
+    // adding authentication library
+    implementation 'com.google.firebase:firebase-auth:16.1.0'
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     testImplementation 'junit:junit:4.12'
