@@ -2,15 +2,12 @@ package com.thehappybit.instagramclone;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 import com.thehappybit.instagramclone.Models.Post;
-import com.thehappybit.instagramclone.Unsplash.Unsplash;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,10 +63,6 @@ public class Feed extends AppCompatActivity {
         PostListAdapter postListAdapter = new PostListAdapter(this, postList);
 
         feed_recyclerview.setAdapter(postListAdapter);
-
-        Unsplash unsplash = new Unsplash("326bef9760764eee43c5b3bf729d12207f4a607f1e23c9b4b11db9275fd79cde");
-
-        unsplash.getPhotos();
 
     }
 
