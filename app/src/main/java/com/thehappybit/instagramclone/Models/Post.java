@@ -2,17 +2,19 @@ package com.thehappybit.instagramclone.Models;
 
 public class Post {
 
-    private String postTitle;
     private String userName;
     private String postText;
-    private String commentText;
-    private String profileImage;
+    private String userProfileImage;
     private String postImage;
 
-    public Post(String userName, String postText, String profileImage, String postImage) {
+    public Post(){
+
+    }
+
+    public Post(String userName, String postText, String userProfileImage, String postImage){
         this.userName = userName;
         this.postText = postText;
-        this.profileImage = profileImage;
+        this.userProfileImage = userProfileImage;
         this.postImage = postImage;
     }
 
@@ -32,20 +34,12 @@ public class Post {
         this.postText = postText;
     }
 
-    public String getCommentText() {
-        return commentText;
+    public String getUserProfileImage() {
+        return userProfileImage;
     }
 
-    public void setCommentText(String commentText) {
-        this.commentText = commentText;
-    }
-
-    public String getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
+    public void setUserProfileImage(String userProfileImage) {
+        this.userProfileImage = userProfileImage;
     }
 
     public String getPostImage() {

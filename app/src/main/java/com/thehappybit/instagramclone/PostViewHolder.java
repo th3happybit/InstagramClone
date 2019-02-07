@@ -1,13 +1,11 @@
 package com.thehappybit.instagramclone;
 
-import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 import com.thehappybit.instagramclone.Models.Post;
 
@@ -42,7 +40,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             userName.setText(post.getUserName());
             postText.setText(post.getPostText());
             Picasso.get().load(post.getPostImage()).into(postImage);
-            Picasso.get().load(post.getProfileImage()).into(profile_image);
+            Picasso.get().load(post.getUserProfileImage()).into(profile_image);
         }
     }
 }

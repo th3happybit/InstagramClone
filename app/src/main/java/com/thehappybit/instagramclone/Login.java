@@ -30,6 +30,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.thehappybit.instagramclone.Models.User;
 
 public class Login extends AppCompatActivity {
 
@@ -50,6 +56,9 @@ public class Login extends AppCompatActivity {
     private CallbackManager callbackManager;
 
     private ProgressBar progressBar;
+
+    private DatabaseReference databaseReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +72,9 @@ public class Login extends AppCompatActivity {
         createNewBtn = findViewById(R.id.create_new_text);
         signOut = findViewById(R.id.logout_btn);
 
+        // Initialize Database reference
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
         // Initialize Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -71,7 +83,6 @@ public class Login extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 //check if user want to create new or login
                 if (createNew)
                     // user create new account
@@ -108,8 +119,6 @@ public class Login extends AppCompatActivity {
         // init progress bar
         progressBar = findViewById(R.id.progress_bar);
 
-
-
         // Initialize Facebook Login button
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = findViewById(R.id.facebook_login);
@@ -132,6 +141,8 @@ public class Login extends AppCompatActivity {
                 updateUI(null);
             }
         });
+
+
     }
 
     @Override
@@ -187,6 +198,7 @@ public class Login extends AppCompatActivity {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     updateUI(user);
 
+                    onAuthSuccess(user);
                 }else{
                     //task failed
                     // the exception message to debug
@@ -221,7 +233,7 @@ public class Login extends AppCompatActivity {
 
             status.setText("You are logged in");
 
-
+            startActivity(new Intent(getApplicationContext(), Feed.class));
         }else{
             // show sign up/ sign in views
             findViewById(R.id.email_input_layout).setVisibility(View.VISIBLE);
@@ -256,6 +268,8 @@ public class Login extends AppCompatActivity {
 
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     updateUI(user);
+
+                    startActivity(new Intent(getApplicationContext(), Feed.class));
 
                 }else{
 
@@ -323,4 +337,27 @@ public class Login extends AppCompatActivity {
         // Pass the activity result back to the Facebook SDK
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
+
+
+    // to add user to database when he creates an account
+    private void onAuthSuccess(FirebaseUser user) {
+
+        User userDb = new User(user.getUid(), user.getEmail());
+
+        databaseReference.child("users").child(user.getUid()).setValue(userDb).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                // Go to Feed Activity
+                startActivity(new Intent(getApplicationContext(), Feed.class));
+                finish();
+
+            }
+        });
+
+
+    }
+
+
+
 }

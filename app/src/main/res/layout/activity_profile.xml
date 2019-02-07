@@ -29,9 +29,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/ilyes"/>
+                android:src="@drawable/framegrey"/>
 
             <ImageButton
+                android:id="@+id/add_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/group_2"
@@ -48,7 +49,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/userPhoto"
-                android:text="Ilyes Boudjelthia" />
+                android:text="User Name" />
 
             <ImageView
                 android:id="@+id/location_icon"
@@ -72,7 +73,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/location_icon"
                 app:layout_constraintTop_toBottomOf="@id/user_name"
-                android:text="Chlef, Algeria" />
+                android:text="Location ex:Chlef, Algeria" />
 
             <LinearLayout
                 android:id="@+id/stattistics_view"

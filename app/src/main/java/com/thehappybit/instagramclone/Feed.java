@@ -7,10 +7,13 @@ import android.view.MenuItem;
 
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import com.thehappybit.instagramclone.Models.Post;
+
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,7 +41,9 @@ public class Feed extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() ==R.id.action_profile){
-                    startActivity(new Intent(getApplicationContext(), Profile.class));
+
+                        startActivity(new Intent(getApplicationContext(), Profile.class));
+
                     return true;
                 }
                 return false;
