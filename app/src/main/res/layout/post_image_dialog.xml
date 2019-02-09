@@ -17,41 +17,30 @@
         android:visibility="gone"/>
 
     <ImageView
-        android:id="@+id/profile_image"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:id="@+id/post_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:layout_margin="20dp"
-        android:maxHeight="200dp"
-        android:maxWidth="200dp"
-        android:minHeight="150dp"
-        android:minWidth="150dp"
-        android:scaleType="centerCrop"
         android:contentDescription="TODO"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:maxHeight="200dp"
+        android:minWidth="150dp"
+        android:minHeight="150dp"
+        android:src="@drawable/ic_add_a_photo_black_50dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/framegrey"/>
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/name_input"
+        android:id="@+id/post_text_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:layout_margin="15dp"
-        app:layout_constraintTop_toBottomOf="@id/profile_image"
+        android:hint="Enter post text here"
+        android:inputType="textLongMessage|textMultiLine"
+        android:selectAllOnFocus="false"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <EditText
-        android:id="@+id/location_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_margin="15dp"
-        app:layout_constraintTop_toBottomOf="@id/name_input"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/post_image" />
 
     <Button
         android:id="@+id/save_button"
@@ -59,7 +48,7 @@
         android:layout_height="wrap_content"
         app:backgroundTint="@color/green"
         android:text="Save"
-        app:layout_constraintTop_toBottomOf="@id/location_input"
+        app:layout_constraintTop_toBottomOf="@id/post_text_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/cancel_button"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -70,7 +59,7 @@
         android:layout_height="wrap_content"
         app:backgroundTint="@color/red"
         android:text="Cancel"
-        app:layout_constraintTop_toBottomOf="@id/location_input"
+        app:layout_constraintTop_toBottomOf="@id/post_text_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/save_button"
         app:layout_constraintBottom_toBottomOf="parent"/>

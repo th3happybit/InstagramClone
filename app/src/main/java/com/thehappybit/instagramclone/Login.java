@@ -152,6 +152,8 @@ public class Login extends AppCompatActivity {
         //Check if user is signed in (non-null)
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         updateUI(currentUser);
+        if (currentUser != null)
+            onSignInSuccess(currentUser);
 
     }
 
@@ -269,7 +271,7 @@ public class Login extends AppCompatActivity {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     updateUI(user);
 
-                    startActivity(new Intent(getApplicationContext(), Feed.class));
+                    onSignInSuccess(user);
 
                 }else{
 
@@ -351,6 +353,28 @@ public class Login extends AppCompatActivity {
                 // Go to Feed Activity
                 startActivity(new Intent(getApplicationContext(), Feed.class));
                 finish();
+
+            }
+        });
+
+
+    }
+
+    // to add user to database when he creates an account
+    private void onSignInSuccess(FirebaseUser user) {
+
+        databaseReference.child("users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                Intent intent = new Intent(Login.this, Feed.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });

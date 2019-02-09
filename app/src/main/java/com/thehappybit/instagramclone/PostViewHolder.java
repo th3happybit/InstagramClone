@@ -1,5 +1,6 @@
 package com.thehappybit.instagramclone;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -39,8 +40,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         if (post != null){
             userName.setText(post.getUserName());
             postText.setText(post.getPostText());
-            Picasso.get().load(post.getPostImage()).into(postImage);
-            Picasso.get().load(post.getUserProfileImage()).into(profile_image);
+            if (!TextUtils.isEmpty(post.getPostImage()))
+                Picasso.get().load(post.getPostImage()).into(postImage);
+            if (!TextUtils.isEmpty(post.getUserProfileImage()))
+                Picasso.get().load(post.getUserProfileImage()).into(profile_image);
         }
     }
 }

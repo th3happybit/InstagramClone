@@ -16,7 +16,6 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -32,8 +31,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,13 +42,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.thehappybit.instagramclone.Models.Post;
 import com.thehappybit.instagramclone.Models.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import static android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
@@ -73,10 +71,11 @@ public class Profile extends AppCompatActivity {
     private TextView locationTextView;
     private ImageButton addImage;
 
-    private DatabaseReference databaseReference;
+    private DatabaseReference usersReference;
     private StorageReference profileImages;
 
     private FirebaseUser user;
+    private User userdb;
 
 
     @Override
@@ -86,9 +85,10 @@ public class Profile extends AppCompatActivity {
 
         // get current user
         user = FirebaseAuth.getInstance().getCurrentUser();
+        userdb = (User) getIntent().getExtras().getParcelable("user");
 
         // Initialize the database reference "users"
-        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        usersReference = FirebaseDatabase.getInstance().getReference("users");
         // Initialize the storage reference "profiles"
         profileImages = FirebaseStorage.getInstance().getReference("profiles");
 
@@ -110,7 +110,7 @@ public class Profile extends AppCompatActivity {
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User userdb = dataSnapshot.getValue(User.class);
+                userdb = dataSnapshot.getValue(User.class);
                 //set change to views
                 if (userdb != null){
                     if (!TextUtils.isEmpty(userdb.getName()))
@@ -131,7 +131,7 @@ public class Profile extends AppCompatActivity {
         };
 
         //Initialize user reference
-        DatabaseReference userRef = databaseReference.child(user.getUid());
+        DatabaseReference userRef = usersReference.child(user.getUid());
         // add event listener to the user reference
         userRef.addValueEventListener(valueEventListener);
 
@@ -143,7 +143,9 @@ public class Profile extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.action_home){
-                    startActivity(new Intent(getApplicationContext(), Feed.class));
+                    Intent intent = new Intent(getApplicationContext(), Feed.class);
+                    intent.putExtra("user", userdb);
+                    startActivity(intent);
                     return true;
                 }
                 return false;
@@ -161,10 +163,36 @@ public class Profile extends AppCompatActivity {
         postsPreviewRecyclerview.setLayoutManager(gridLayoutManager);
 
         List<String> postList = new ArrayList<>();
-
-        ProfilePostListAdapter postListAdapter = new ProfilePostListAdapter(this, postList);
+        final ProfilePostListAdapter postListAdapter = new ProfilePostListAdapter(this, postList);
         postsPreviewRecyclerview.setAdapter(postListAdapter);
 
+
+        //Initialize posts valueListener
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> posts = new ArrayList<>();
+                // get posts
+                for (DataSnapshot post : dataSnapshot.getChildren()){
+                    // add just the user posts
+                    if (userdb != null)
+                        if (TextUtils.equals(user.getUid(), userdb.getUid()))
+                            posts.add(post.getValue(Post.class).getPostImage());
+                }
+                //Set posts in the list
+                postListAdapter.setPosts(posts);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "getting posts failed, check your connection!", Toast.LENGTH_LONG).show();
+
+            }
+        };
+
+        // Initialize the database reference "users"
+        FirebaseDatabase.getInstance().getReference("posts").addValueEventListener(postListener);
 
     }
 
@@ -246,7 +274,7 @@ public class Profile extends AppCompatActivity {
                 // name variable isn't empty
                 if (!TextUtils.isEmpty(name)){
                     // save the new name to database
-                    databaseReference.child(user.getUid()).child("name").setValue(name).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    usersReference.child(user.getUid()).child("name").setValue(name).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             progressBar.setVisibility(View.GONE);
@@ -257,7 +285,7 @@ public class Profile extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 if (!TextUtils.isEmpty(location)){
                     // save new location to database
-                    databaseReference.child(user.getUid()).child("location").setValue(location).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    usersReference.child(user.getUid()).child("location").setValue(location).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             progressBar.setVisibility(View.GONE);
@@ -294,7 +322,7 @@ public class Profile extends AppCompatActivity {
                                     public void onSuccess(Uri uri) {
                                         String photoStringUrl = uri.toString();
                                         // save the download url in user imageUrl field in database
-                                        databaseReference.child(user.getUid()).child("imageUrl").setValue(photoStringUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        usersReference.child(user.getUid()).child("imageUrl").setValue(photoStringUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 progressBar.setVisibility(View.GONE);
