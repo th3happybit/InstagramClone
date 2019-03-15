@@ -2,12 +2,12 @@
 Instagram clone for android workshop
 
 
-<img src="https://raw.githubusercontent.com/th3happybit/InstagramClone/master/screens/login.png" alt="Login" />
-<img src="https://raw.githubusercontent.com/th3happybit/InstagramClone/master/screens/feed.png" alt="Feed" />
-<img src="https://raw.githubusercontent.com/th3happybit/InstagramClone/master/screens/profile.png" alt="Profile""/>
+<img src="https://raw.githubusercontent.com/th3happybit/InstagramClone/master/screens/login.png" alt="Login"  width="200" height="400" />
+<img src="https://raw.githubusercontent.com/th3happybit/InstagramClone/master/screens/feed.png" alt="Feed"  width="200" height="400"/>
+<img src="https://raw.githubusercontent.com/th3happybit/InstagramClone/master/screens/profile.png" alt="Profile"  width="200" height="400"/>
 
 
-* Design by Ilyes Boudjelthia [link](https://www.facebook.com/Ilyes.Boudjelthia)
+* Design by [Ilyes Boudjelthia](https://www.facebook.com/Ilyes.Boudjelthia)
 
 
 ## Requirements
