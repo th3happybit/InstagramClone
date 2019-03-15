@@ -23,13 +23,11 @@
                 android:id="@+id/userPhoto"
                 android:layout_width="114dp"
                 android:layout_height="114dp"
-                android:layout_marginTop="16dp"
+                android:src="@drawable/framegrey"
                 app:civ_border_color="#c2238d"
                 app:civ_border_width="2dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/framegrey"/>
+                tools:layout_editor_absoluteX="149dp"
+                tools:layout_editor_absoluteY="16dp" />
 
             <ImageButton
                 android:id="@+id/add_image"
@@ -43,13 +41,11 @@
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:text="User Name"
                 android:textColor="#2c2c2c"
                 android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/userPhoto"
-                android:text="User Name" />
+                tools:layout_editor_absoluteX="156dp"
+                tools:layout_editor_absoluteY="146dp" />
 
             <ImageView
                 android:id="@+id/location_icon"

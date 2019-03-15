@@ -21,16 +21,16 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_margin="20dp"
-        android:maxHeight="200dp"
-        android:maxWidth="200dp"
-        android:minHeight="150dp"
-        android:minWidth="150dp"
-        android:scaleType="centerCrop"
         android:contentDescription="TODO"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:maxWidth="200dp"
+        android:maxHeight="200dp"
+        android:minWidth="150dp"
+        android:minHeight="150dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/framegrey"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/framegrey"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <EditText

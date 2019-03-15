@@ -1,7 +1,14 @@
 # InstagramClone
 Instagram clone for android workshop
 
-<img src="https://raw.githubusercontent.com/th3happybit/InstagramClone/master/ScreenShots/screen.jpg" alt="Home Page" class="inline"/>
+
+<img src="https://raw.githubusercontent.com/th3happybit/InstagramClone/master/screens/login.png" alt="Login" />
+<img src="https://raw.githubusercontent.com/th3happybit/InstagramClone/master/screens/feed.png" alt="Feed" />
+<img src="https://raw.githubusercontent.com/th3happybit/InstagramClone/master/screens/profile.png" alt="Profile""/>
+
+
+* Design by Ilyes Boudjelthia [link](https://www.facebook.com/Ilyes.Boudjelthia)
+
 
 ## Requirements
 * Material design library [link](https://material.io/develop/)
