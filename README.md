@@ -1,6 +1,8 @@
 # InstagramClone
 Instagram clone for android workshop
 
+<img src="https://raw.githubusercontent.com/th3happybit/InstagramClone/master/ScreenShots/screen.jpg" alt="Home Page" class="inline"/>
+
 ## Requirements
 * Material design library [link](https://material.io/develop/)
 
