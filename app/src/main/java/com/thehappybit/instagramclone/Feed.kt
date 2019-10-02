@@ -1,126 +1,89 @@
-package com.thehappybit.instagramclone;
+package com.thehappybit.instagramclone
 
-import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.thehappybit.instagramclone.Models.Post;
-import com.thehappybit.instagramclone.Models.User;
+import android.app.Dialog
+import android.content.Intent
+import android.graphics.Bitmap
+import android.os.Bundle
+import android.view.View
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.thehappybit.instagramclone.models.Post
+import com.thehappybit.instagramclone.models.User
 
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+class Feed : AppCompatActivity() {
+
+    private lateinit var feed_recyclerview: RecyclerView
+    private lateinit var bottomNavigationView: BottomNavigationView
+
+    private lateinit var add_fab: FloatingActionButton
+    private lateinit var postImageDialog: Dialog
+    private lateinit var postImage: ImageView
+    private var postText = ""
+    private lateinit var imageBitmap: Bitmap
+    private val  requestCode = 100
 
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+    private lateinit var databaseReference:DatabaseReference
+    private lateinit var postsImages:StorageReference
 
-import static android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+    private lateinit var user:FirebaseUser?
 
-public class Feed extends AppCompatActivity {
+    private lateinit var dbuser: User
 
 
-    private RecyclerView feed_recyclerview;
-    private BottomNavigationView bottomNavigationView;
 
-    private FloatingActionButton add_fab;
-    private Dialog postImageDialog;
-    private ImageView postImage;
-    private String postText = "";
-    private Bitmap imageBitmap;
-    private int requestCode = 100;
-
-
-    private DatabaseReference databaseReference;
-    private StorageReference postsImages;
-
-    private FirebaseUser user;
-
-    private User dbuser;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        val  toolbar =  findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar);
 
         bottomNavigationView = findViewById(R.id.bottom_nav);
-        bottomNavigationView.setSelectedItemId(R.id.action_home);
+        bottomNavigationView.selectedItemId = R.id.action_home;
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() ==R.id.action_profile){
-                    Intent intent = new Intent(getApplicationContext(), Profile.class);
-                    intent.putExtra("user", dbuser);
-                    startActivity(intent);
+        bottomNavigationView.setOnNavigationItemSelectedListener {
+            if (it.getItemId() ==R.id.action_profile){
+                val  intent = Intent(applicationContext, Profile::class.java)
+                intent.putExtra("user", dbuser);
+                startActivity(intent);
 
-                    return true;
-                }
-                return false;
+                true
             }
-        });
+             false
+        }
 
-        feed_recyclerview = findViewById(R.id.feed_recyclerview);
-        feed_recyclerview.setHasFixedSize(true);
+        feed_recyclerview = findViewById(R.id.feed_recyclerview)
+        feed_recyclerview.setHasFixedSize(true)
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        val  linearLayoutManager = LinearLayoutManager(this)
 
-        feed_recyclerview.setLayoutManager(linearLayoutManager);
+        feed_recyclerview.layoutManager = linearLayoutManager
 
-        List<Post> postList = new ArrayList<>();
+        val  postList =  ArrayList<Post>()
 
-        final PostListAdapter postListAdapter = new PostListAdapter(this, postList);
+        val  postListAdapter = PostListAdapter(this, postList);
 
         feed_recyclerview.setAdapter(postListAdapter);
 
 
         add_fab = findViewById(R.id.add_fab);
-        add_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                postImageD();
-            }
-        });
+        add_fab.setOnClickListener {
+            postImageD()
+        }
 
         // get current user
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -130,26 +93,26 @@ public class Feed extends AppCompatActivity {
         // Initialize the storage reference "profiles"
         postsImages = FirebaseStorage.getInstance().getReference("posts");
 
-        dbuser = (User) getIntent().getExtras().getParcelable("user");
+        dbuser = intent.getExtras().getParcelable("user")
 
 
         //Initialize posts valueListener
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Post> posts = new ArrayList<>();
+        val  postListener = object : ValueEventListener {
+
+            override fun  onDataChange( dataSnapshot:DataSnapshot) {
+                val  posts = ArrayList<Post? >();
                 // get posts
-                for (DataSnapshot post : dataSnapshot.getChildren()){
-                    posts.add(post.getValue(Post.class));
+                for (post in dataSnapshot.getChildren()){
+                    posts.add(post.getValue(Post::class.java))
                 }
                 // Set posts in the list
-                postListAdapter.setPosts(posts);
+                postListAdapter.setposts(posts)
 
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "getting posts failed, check your connection!", Toast.LENGTH_LONG).show();
+
+            override  fun onCancelled( databaseError:   DatabaseError) {
+                Toast.makeText(getApplicationContext(), "getting posts failed, check your connection!", Toast.LENGTH_LONG).show()
 
             }
         };
