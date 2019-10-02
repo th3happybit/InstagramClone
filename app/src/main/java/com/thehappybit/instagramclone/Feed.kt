@@ -4,9 +4,14 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
+import android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -21,6 +26,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.thehappybit.instagramclone.models.Post
 import com.thehappybit.instagramclone.models.User
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 
 class Feed : AppCompatActivity() {
@@ -31,15 +38,15 @@ class Feed : AppCompatActivity() {
     private lateinit var add_fab: FloatingActionButton
     private lateinit var postImageDialog: Dialog
     private lateinit var postImage: ImageView
-    private var postText = ""
-    private lateinit var imageBitmap: Bitmap
+    private var postText:String? = ""
+    private  var imageBitmap: Bitmap?= null
     private val  requestCode = 100
 
 
     private lateinit var databaseReference:DatabaseReference
     private lateinit var postsImages:StorageReference
 
-    private lateinit var user:FirebaseUser?
+    private  var user:FirebaseUser?=null
 
     private lateinit var dbuser: User
 
@@ -123,138 +130,111 @@ class Feed : AppCompatActivity() {
     }
 
     //Post an image dialog
-    private void postImageD(){
+    private fun  postImageD(){
 
         // Initialize profile post dialog
-        postImageDialog = new Dialog(Feed.this);
+        postImageDialog = Dialog(this);
         postImageDialog.setTitle("Post");
         postImageDialog.setContentView(R.layout.post_image_dialog);
 
         //Initialize views
         postImage = postImageDialog.findViewById(R.id.post_image);
-        final EditText postTextInput = postImageDialog.findViewById(R.id.post_text_input);;
-        Button saveBtn = postImageDialog.findViewById(R.id.save_button);
-        Button cancelBtn = postImageDialog.findViewById(R.id.cancel_button);
-        final ProgressBar progressBar = postImageDialog.findViewById(R.id.progress_bar);
+        val   postTextInput = postImageDialog.findViewById<EditText>(R.id.post_text_input)
+        val  saveBtn = postImageDialog.findViewById<Button>(R.id.save_button);
+        val  cancelBtn = postImageDialog.findViewById<Button>(R.id.cancel_button);
+        val  progressBar = postImageDialog.findViewById<ProgressBar>(R.id.progress_bar);
 
         // when user click on image view (add image icon) this took him to his images gallery to chose an image
-        postImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, requestCode);
-            }
-        });
+        postImage.setOnClickListener {
+            val  intent =Intent(Intent.ACTION_PICK, EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, requestCode);
+        }
 
         //watch text inputs
-        postTextInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+        postTextInput.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
             }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                postText = s.toString();
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                postText = p0.toString()
             }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
-        });
+        })
 
         // save button
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        saveBtn.setOnClickListener {
+            // show progress bar
+            progressBar.setVisibility(View.VISIBLE);
 
-                // show progress bar
-                progressBar.setVisibility(View.VISIBLE);
+            // save the new post to Firebase database
+            val fpost = databaseReference.push();
+            if (dbuser != null)
+                fpost.setValue(Post(dbuser.name, postText, dbuser.imageUrl, ""));
 
-                // save the new post to Firebase database
-                final DatabaseReference fpost = databaseReference.push();
-                if (dbuser != null){
-                    fpost.setValue(new Post(dbuser.getName(), postText,  dbuser.getImageUrl(), ""));
+            if (imageBitmap != null) {
+                //upload the post image to storage anf give it the post unique key as a name
+                val imageName = fpost.getKey() + ".jpg";
+                val profileImageRef = postsImages.child(imageName);
 
-                    if (imageBitmap != null){
-                        //upload the post image to storage anf give it the post unique key as a name
-                        String imageName = fpost.getKey() + ".jpg";
-                        final StorageReference profileImageRef = postsImages.child(imageName);
+                //bitmap to byte array
+                val baos = ByteArrayOutputStream();
+                imageBitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                val data = baos.toByteArray();
 
-                        //bitmap to byte array
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                        byte[] data = baos.toByteArray();
-
-                        // Initialize the upload task
-                        UploadTask uploadTask = profileImageRef.putBytes(data);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getApplicationContext(), "Upload of the profile image failed, Try Again!", Toast.LENGTH_LONG).show();
-                                progressBar.setVisibility(View.GONE);
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                                //To get the download url of file in storage
-                                Task<Uri> result = taskSnapshot.getMetadata().getReference().getDownloadUrl();
-                                result.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        String photoStringUrl = uri.toString();
-                                        // save the download url in post image field in database
-                                        fpost.child("postImage").setValue(photoStringUrl);
-
-                                        //hide progress bar
-                                        progressBar.setVisibility(View.GONE);
-                                        //close dialog
-                                        postImageDialog.dismiss();
-                                    }
-                                });
-                            }
-                        });
-                    }
-                }else
+                // Initialize the upload task
+                val uploadTask = profileImageRef.putBytes(data);
+                uploadTask.addOnFailureListener {
+                    Toast.makeText(getApplicationContext(), "Upload of the profile image failed, Try Again!", Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.GONE);
+                }.addOnSuccessListener {
+                    val result = it.getMetadata()!!.getReference()!!.getDownloadUrl();
+                    result.addOnSuccessListener {
+                        val photoStringUrl = it.toString();
+                        // save the download url in post image field in database
+                        fpost.child("postImage").setValue(photoStringUrl);
 
+                        //hide progress bar
+                        progressBar.setVisibility(View.GONE);
+                        //close dialog
+                        postImageDialog.dismiss();
+                    }
+                }
+            } else {
+                progressBar.setVisibility(View.GONE);
             }
-        });
 
-        //close dialog
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+
+            //close dialog
+            cancelBtn.setOnClickListener{
                 postText = null;
                 imageBitmap = null;
                 postImageDialog.dismiss();
                 progressBar.setVisibility(View.GONE);
             }
-        });
 
-        postImageDialog.show();
+            postImageDialog.show();
+        }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    override fun  onCreateOptionsMenu( menu:Menu):Boolean  {
         getMenuInflater().inflate(R.menu.feed_actionbar_menu, menu);
-        return true;
+        return true
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_notifications:
+
+    override fun  onOptionsItemSelected( item:MenuItem) :Boolean {
+        when(item.getItemId()) {
+             R.id.action_notifications->
 
                 return true;
 
-            case R.id.action_favorite:
+             R.id.action_favorite->
 
                 return true;
 
-            default:
+            else->
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
@@ -263,21 +243,20 @@ class Feed : AppCompatActivity() {
     }
 
     // on activity of gallery result (to handle the choose image)
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == this.requestCode) {
             if (data != null) {
-                Uri selectedImage = data.getData();
+                val selectedImage = data.getData();
                 try {
                     //get image from media store
                     imageBitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), selectedImage);
                     // set image in image view of dialog
                     postImage.setImageBitmap(imageBitmap);
-                } catch (IOException e) {
+                } catch ( e:IOException) {
                     e.printStackTrace();
                 }
             }
         }
     }
-
 }
